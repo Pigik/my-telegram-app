@@ -21,7 +21,7 @@
         
         @font-face {
             font-family: 'CustomFont'; 
-            src: url('assets/fonts/himalaya.woff2') format('woff2');
+            src: url('/assets/fonts/himalaya.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
             font-display: block; /* Предотвращает невидимый текст при загрузке */
@@ -1148,7 +1148,7 @@
 
             <div class="header-center" onclick="navigate('brand')">
                 <div class="brand-logo-container">
-                    <img src="assets/brand_logo.jpg" alt="Logo">
+                    <img src="/assets/brand_logo.jpg" alt="Logo">
                 </div>
 
             </div>
@@ -1169,7 +1169,7 @@
     <div id="brand-screen" class="screen">
         <div class="brand-screen-content">
             <div class="brand-main-image">
-                <img src="assets/friends.jpg" alt="Morelufs Media">
+                <img src="/assets/friends.jpg" alt="Morelufs Media">
             </div>
             <div class="brand-text-card">
                 <h2>О бренде MORELUFS</h2>
@@ -1351,7 +1351,7 @@
                 title: "Zip-Hoodie Onyx Black",
                 price: 5490,
                 status: 1,
-                images: ["assets/black_zip_1.jpg", "assets/black_zip_2.jpg", "assets/black_zip_3.jpg"],
+                images: ["/assets/black_zip_1.jpg", "/assets/black_zip_2.jpg", "/assets/black_zip_3.jpg"],
                 sizes: ["S", "M", "L"],
                 desc: "зип-худи "
             },
@@ -1360,7 +1360,7 @@
                 title: "Zip-Hoodie Slate Grey",
                 price: 5990,
                 status: 1,
-                images: ["assets/grey_zip_3.jpg", "assets/grey_zip_2.jpg", "assets/grey_zip_1.jpg"],
+                images: ["/assets/grey_zip_3.jpg", "/assets/grey_zip_2.jpg", "/assets/grey_zip_1.jpg"],
                 sizes: ["S", "M", "L"],
                 desc: "Зип-худи"
             },
@@ -1370,7 +1370,7 @@
                 price: 2990,
                 oldPrice: 6990,
                 status: 2,
-                images: ["assets/slon.png"],
+                images: ["/assets/slon.png"],
                 sizes: ["S", "M", "L"],
                 desc: "Классический"
             },
@@ -1380,7 +1380,7 @@
                 price: 3490,
                 oldPrice: 4290,
                 status: 2,
-                images: ["assets/black_long.jpg"],
+                images: ["/assets/black_long.jpg"],
                 sizes: ["S", "M", "L"],
                 desc: "Лонгслив"
             }
@@ -1937,10 +1937,10 @@
             }
 
             const qrCodesPool = [
-                "assets/1.png",
-                "assets/2.png",
-                "assets/3.png",
-                "assets/4.png"
+                "/assets/1.png",
+                "/assets/2.png",
+                "/assets/3.png",
+                "/assets/4.png"
             ];
 
             const randomIndex = Math.floor(Math.random() * qrCodesPool.length);
