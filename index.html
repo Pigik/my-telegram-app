@@ -1982,16 +1982,20 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // ОБЯЗАТЕЛЬНО: передаем строку инициализации в кастомном заголовке
                         'X-TG-Init-Data': initDataRaw
                     },
                     body: JSON.stringify(orderPayload)
                 });
 
+                const contentType = response.headers.get("content-type");
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    // Выводим сообщение об ошибке, переданное бэкендом (например: "Слишком много запросов...")
-                    throw new Error(errorData.description || `Ошибка сервера: ${response.status}`);
+                    if (contentType && contentType.includes("application/json")) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.description || `Ошибка API: ${response.status}`);
+                    } else {
+                        throw new Error(`Системный сбой сервера. Код: ${response.status}`);
+                    }
                 }
 
                 const result = await response.json();
