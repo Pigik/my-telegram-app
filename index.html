@@ -1510,7 +1510,7 @@
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
 
-                if (!data.orders || data.orders.length === 0) {
+                if (!data.orders || data.orders.length == 0) {
                     container.innerHTML = `
                         <div class="empty-cart-msg">
                         <span>У вас пока нет заказов</span>
