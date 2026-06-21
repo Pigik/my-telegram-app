@@ -70,7 +70,7 @@
 
         #brand-screen { transform: translate3d(-100%, 0, 0); }
 
-        #catalog-screen, #cart-screen {
+        #catalog-screen, #cart-screen, #orders-screen {
             display: flex;
             flex-direction: column;
         }
@@ -412,6 +412,13 @@
             font-weight: 700;
             letter-spacing: 1px;
         }
+        .desc-header {
+            display: inline-block;
+            font-weight: 700;       /* Жирный шрифт */
+            font-size: 15px;        /* Чуть больший размер (базовый обычно ~13px-14px) */
+            margin-top: 8px;        /* Небольшой отступ сверху для читаемости */
+            color: var(--text-color);
+        }
 
         .size-selector { display: flex; gap: 14px; }
         .size-chip {
@@ -547,13 +554,23 @@
             justify-content: center;
         }
 
-        #cart-items-container {
+        #cart-items-container, #orders-container {
             flex: 1;
             overflow-y: auto;
-            padding: 0 16px 140px;
             background-color: var(--bg-color);
             -webkit-overflow-scrolling: touch;
             overscroll-behavior-y: contain;
+        }
+
+        #cart-items-container {
+            padding: 0 16px 140px;
+        }
+
+        #orders-container {
+            padding: 0 16px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .empty-cart-msg {
@@ -1016,6 +1033,7 @@
         .brand-links-container {
             width: 100%;
             display: flex;
+            margin-bottom: 24px;
             flex-direction: column;
             gap: 14px;
         }
@@ -1171,9 +1189,24 @@
             <div class="brand-main-image">
                 <img src="./assets/friends.jpg" alt="Morelufs Media">
             </div>
+            <div class="brand-links-container">
+                <a href="javascript:void(0)" onclick="navigate('orders')" class="brand-social-link">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path d="M7 12h10v2H7zm0-4h10v2H7zm0 8h7v2H7z"/>
+                    </svg>
+                    Мои заказы
+                </a>
+            </div>
             <div class="brand-text-card">
                 <h2>О бренде MORELUFS</h2>
-                <p>Добро пожаловать в наше официальное приложение. </p>
+                <p>LUFS - условная единица измерения громкости аудиосигнала. 
+                <br><br>
+                Когда глаза хотят видеть больше, когда ноги хотят идти дальше, когда сердце не может стучаться без одержимости своим делом, мы не молчим - мы звучим.
+                <br>
+                <br>
+                Morelufs - это личность, отражающая историю двух душ, одержимых,  поглощенных, но не усопших в своей мечте. Пропитанные самобытностью своего маленького северного города, они рискнули и пересекли видимый горизонт, для того, чтобы их внутренний звук обрёл эхо.
+                </p>
             </div>
             <div class="brand-links-container">
                 <a href="https://instagram.com/morelufs" target="_blank" class="brand-social-link">
@@ -1335,7 +1368,13 @@
             <button class="submit-order-btn" onclick="confirmQRPayment()">Я оплатил</button>
         </div>
     </div>
-
+    <div id="orders-screen" class="screen">
+        <div class="header">
+            <h1 class="main-title">Мои заказы</h1>
+        </div>
+        <div id="orders-container">
+            </div>
+    </div>
     <script>
         const tg = window.Telegram.WebApp;
         if (window.Telegram.WebApp && window.Telegram) {
@@ -1353,7 +1392,7 @@
                 status: 1,
                 images: ["./assets/black_zip_1.jpg", "./assets/black_zip_2.jpg", "./assets/black_zip_3.jpg"],
                 sizes: ["S", "M", "L"],
-                desc: "Состав: 100% хлопок, 480 г/м². \nРекомендации по уходу:\nСтирка: Стирать на изнанку. Предпочтительна ручная стирка; \nпри машинной — использовать только деликатный режим при температуре 30 C. Избегать интенсивного отжима и высоких оборотов.\nГлажка: Гладить только с изнаночной стороны при низкой температуре. Не прикасаться утюгом к молнии."
+                desc: "Состав: \n100% хлопок, 480 г/м². \nРекомендации по уходу:\nСтирка: Стирать на изнанку. Предпочтительна ручная стирка; \nпри машинной — использовать только деликатный режим при температуре 30 C. Избегать интенсивного отжима и высоких оборотов.\nГлажка: Гладить только с изнаночной стороны при низкой температуре. Не прикасаться утюгом к молнии."
             },
             {
                 id: 2,
@@ -1362,7 +1401,7 @@
                 status: 1,
                 images: ["./assets/grey_zip_3.jpg", "./assets/grey_zip_2.jpg", "./assets/grey_zip_1.jpg"],
                 sizes: ["S", "M", "L"],
-                desc: "Состав: 100% хлопок, 480 г/м². \nРекомендации по уходу:\nСтирка: Стирать на изнанку. Предпочтительна ручная стирка; \nпри машинной — использовать только деликатный режим при температуре 30 C. Избегать интенсивного отжима и высоких оборотов.\nГлажка: Гладить только с изнаночной стороны при низкой температуре. Не прикасаться утюгом к молнии."
+                desc: "Состав:\n100% хлопок, 480 г/м². \nРекомендации по уходу:\nСтирка: Стирать на изнанку. Предпочтительна ручная стирка; \nпри машинной — использовать только деликатный режим при температуре 30 C. Избегать интенсивного отжима и высоких оборотов.\nГлажка: Гладить только с изнаночной стороны при низкой температуре. Не прикасаться утюгом к молнии."
             },
             {
                 id: 3,
@@ -1372,7 +1411,7 @@
                 status: 2,
                 images: ["./assets/slon.png"],
                 sizes: ["S", "M", "L"],
-                desc: "Состав: 100% хлопок (кулирная гладь), 250 г/м².\nРекомендации по уходу:\nСтирка:\nСтирать наизнанку.Предпочтительна ручная стирка; при машинной — использовать только деликатный режим при температуре 30–40 °C.Допустим отжим на минимальных оборотах (400–600)\nГлажка:\nГладить только с изнаночной стороны при низкой или средней температуре"
+                desc: "Состав: \n100% хлопок (кулирная гладь), 250 г/м².\nРекомендации по уходу:\nСтирка:\nСтирать наизнанку. Предпочтительна ручная стирка; при машинной — использовать только деликатный режим при температуре 30–40 °C. Допустим отжим на минимальных оборотах (400–600)\nГлажка:\nГладить только с изнаночной стороны при низкой или средней температуре"
             },
             {
                 id: 4,
@@ -1382,7 +1421,7 @@
                 status: 2,
                 images: ["./assets/black_long.jpg"],
                 sizes: ["S", "M", "L"],
-                desc: "Состав: 100% хлопок (кулирная гладь), 250 г/м².\nРекомендации по уходу:\nСтирка:\nСтирать наизнанку.Предпочтительна ручная стирка; при машинной — использовать только деликатный режим при температуре 30–40 °C.Допустим отжим на минимальных оборотах (400–600)\nГлажка:\nГладить только с изнаночной стороны при низкой или средней температуре"
+                desc: "Состав: \n100% хлопок (кулирная гладь), 250 г/м².\nРекомендации по уходу:\nСтирка:\nСтирать наизнанку. Предпочтительна ручная стирка; при машинной — использовать только деликатный режим при температуре 30–40 °C. Допустим отжим на минимальных оборотах (400–600)\nГлажка:\nГладить только с изнаночной стороны при низкой или средней температуре"
             }
         ];
 
@@ -1447,14 +1486,74 @@
             if (screenId === 'catalog') renderCatalog();
             if (screenId === 'cart') renderCart();
             if (screenId === 'product' && currentProduct) updateButtonInterface();
-
+            if (screenId === 'orders') fetchAndRenderOrders();
             if (historyStack.length > 1) {
                 tg.BackButton.show();
             } else {
                 tg.BackButton.hide();
             }
         }
+        async function fetchAndRenderOrders() {
+            const container = document.getElementById('orders-container');
+            container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--hint-color); font-weight: 600;">Загрузка данных...</div>';
 
+            const initDataRaw = window.Telegram.WebApp.initData || "";
+            // Замени на свой актуальный ngrok URL
+            const BACKEND_API_URL = "https://193-107-239-8.sslip.io:5000/api/order";
+
+            try {
+                const response = await fetch(BACKEND_API_URL, {
+                    method: 'GET',
+                    headers: { 'X-TG-Init-Data': initDataRaw }
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+
+                if (!data.ok || !data.orders || data.orders.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-cart-msg">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/></svg>
+                            <span>История заказов пуста</span>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                // Разворачиваем массив, чтобы новые заказы (высший ID) были сверху. Временная сложность O(K)
+                data.orders.reverse().forEach(order => {
+                    const card = document.createElement('div');
+                    card.className = 'cart-item';
+                    card.style.flexDirection = 'column';
+                    card.style.alignItems = 'stretch';
+                    
+                    const statusColor = order.status === 'Ожидает подтверждения' ? 'var(--hint-color)' : '#34c759';
+
+                    // Алгоритмическая проверка наличия трек-номера
+                    const trackStr = order.track ? String(order.track).trim().toLowerCase() : '';
+                    const hasTrack = trackStr !== '' && trackStr !== 'null' && trackStr !== 'none';
+
+                    const formattedDetails = order.details
+                        .split('\n')
+                        .map(line => line.trim())
+                        .join('\n');
+
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 8px; margin-bottom: 12px;">
+                            <h4 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-color);">Заказ #${order.id}</h4>
+                            <span style="font-size: 12px; font-weight: 700; color: var(--hint-color);">${order.status}</span>
+                        </div>
+                        ${hasTrack ? `<div style="font-size: 13px; margin-bottom: 12px; color: var(--accent-color); font-weight: 700;">Трек-номер: ${order.track}</div>` : ''}
+                        <div style="font-size: 13px; color: var(--text-color); line-height: 1.5; white-space: pre-wrap; background: var(--bg-color); padding: 12px; border-radius: 7px; border: 1px solid rgba(0,0,0,0.04);"> ${formattedDetails}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                container.innerHTML = `<div style="text-align:center; padding: 40px; color: #ff3b30; font-weight: 600;">Сетевая ошибка при загрузке.</div>`;
+            }
+        }
         function navigate(screenId) {
             if (historyStack[historyStack.length - 1] === screenId) return;
 
@@ -1530,7 +1629,21 @@
             selectedSize = null;
             currentSlideIdx = 0;
             document.getElementById('p-title').innerText = currentProduct.title;
-            document.getElementById('p-desc').innerText = currentProduct.desc;
+            let formattedDesc = currentProduct.desc;
+
+            // Массив заголовков для форматирования
+            const headersToFormat = ["Состав:", "Стирка:", "Глажка:", "Рекомендации по уходу:"];
+
+            headersToFormat.forEach(header => {
+                // Регулярное выражение для поиска заголовка с учётом возможных пробелов
+                const regex = new RegExp(header, 'g');
+                formattedDesc = formattedDesc.replace(regex, `<span class="desc-header">${header}</span>`);
+            });
+
+            // Заменяем обычные переносы строк \n на HTML-тег <br>, так как используем innerHTML
+            formattedDesc = formattedDesc.replace(/\n/g, '<br>');
+
+            document.getElementById('p-desc').innerHTML = formattedDesc;
 
             const statusContainer = document.getElementById('p-status-container');
             const status = currentProduct.status !== undefined ? currentProduct.status : 3;
