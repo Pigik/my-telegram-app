@@ -95,16 +95,34 @@
             flex-shrink: 0;
         }
 
-        .header-center {
+        .menu-hamburger-btn {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 7px;
+            transition: all 0.1s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: opacity 0.1s ease;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        .header-center:active {
-            opacity: 0.7;
+        .menu-hamburger-btn:active {
+            box-shadow: var(--card-shadow-active);
+            transform: scale(0.96);
+        }
+
+        .menu-hamburger-btn svg {
+            width: 60%;
+            height: 60%;
+            stroke: var(--text-color);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            transition: stroke 0.1s ease;
+        }
+
+        .menu-hamburger-btn:active svg {
+            stroke: var(--accent-color);
         }
 
         .brand-logo-container {
@@ -1149,6 +1167,45 @@
         .lightbox-nav-btn.prev { left: 24px; right: auto; }
         .lightbox-nav-btn.next { right: 24px; left: auto; }
 
+        /* Оверлей (задний фон модального окна) */
+        .custom-alert-overlay {
+            background-color: rgba(0, 0, 0, 0.3) !important;
+            z-index: 3000 !important;
+
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+        }
+
+        /* Контейнер самого алерта */
+        .custom-alert-container {
+            background: var(--secondary-bg);
+            width: 85%;
+            max-width: 320px;
+            padding: 24px;
+            border-radius: 7px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Текст уведомления */
+        .custom-alert-message {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-top: 0;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        /* Кнопка подтверждения */
+        .custom-alert-submit {
+            height: 44px !important;
+            margin-bottom: 0 !important;
+            box-shadow: none !important;
+        }
+
         @media (max-width: 768px) {
             .lightbox-nav-btn {
                 width: 44px;
@@ -1164,11 +1221,12 @@
     <div id="catalog-screen" class="screen active">
         <div class="header">
 
-            <div class="header-center" onclick="navigate('brand')">
-                <div class="brand-logo-container">
-                    <img src="./assets/brand_logo.jpg" alt="Logo">
-                </div>
-
+            <div class="menu-hamburger-btn" onclick="navigate('brand')" aria-label="Открыть меню">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <line x1="4" y1="5" x2="20" y2="5" />
+                    <line x1="4" y1="12" x2="20" y2="12" />
+                    <line x1="4" y1="19" x2="20" y2="19" />
+                </svg>
             </div>
             <h1 class="main-title-name">MORELUFS</h1>
             <div class="cart-icon-container" onclick="navigate('cart')">
@@ -1375,6 +1433,12 @@
         <div id="orders-container">
             </div>
     </div>
+    <div id="custom-alert-modal" class="lightbox-modal custom-alert-overlay">
+    <div class="custom-alert-container">
+        <p id="custom-alert-text" class="custom-alert-message"></p>
+        <button id="custom-alert-btn" class="main-action-btn custom-alert-submit">OK</button>
+    </div>
+</div>
     <script>
         const tg = window.Telegram.WebApp;
         if (window.Telegram.WebApp && window.Telegram) {
@@ -1462,13 +1526,12 @@
 
         if (tg.BackButton) {
             tg.BackButton.onClick(() => {
-
                 const currentState = historyStack[historyStack.length - 1];
                 if (currentState === 'lightbox') {
-                closeLightbox();
+                    closeLightbox();
+                } else if (currentState === 'custom-alert') {
+                    closeCustomAlert();
                 } else if (historyStack.length > 1) {
-
-
                     historyStack.pop();
                     const target = historyStack[historyStack.length - 1];
                     renderScreenInternal(target);
@@ -1476,6 +1539,50 @@
             });
         }
 
+
+        let customAlertCallback = null;
+
+        function showCustomAlert(message, callback = null) {
+            const modal = document.getElementById('custom-alert-modal');
+            const textElem = document.getElementById('custom-alert-text');
+            const btn = document.getElementById('custom-alert-btn');
+            
+            textElem.innerText = message;
+            customAlertCallback = callback;
+            
+            modal.classList.add('active');
+            
+            // Внедряем состояние в стек истории Mini App для корректной обработки кнопки Back
+            historyStack.push('custom-alert');
+            if (tg.BackButton) tg.BackButton.show();
+
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+
+            btn.onclick = closeCustomAlert;
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('custom-alert-modal');
+            modal.classList.remove('active');
+            
+            if (historyStack[historyStack.length - 1] === 'custom-alert') {
+                historyStack.pop();
+            }
+            
+            if (historyStack.length > 1) {
+                tg.BackButton.show();
+            } else {
+                tg.BackButton.hide();
+            }
+            
+            if (customAlertCallback) {
+                const cb = customAlertCallback;
+                customAlertCallback = null;
+                cb();
+            }
+        }
         function renderScreenInternal(screenId) {
             validateAndCleanCart();
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1896,11 +2003,8 @@
         function handleAddToCart() {
             if (currentProduct && currentProduct.status === 1) return;
             if (!selectedSize) {
-                if (tg && tg.showAlert) {
-                    tg.showAlert("Пожалуйста, выберите размер!");
-                } else {
-                    alert("Пожалуйста, выберите размер!");
-                }
+                showCustomAlert("Пожалуйста, выберите размер!");
+                
                 return;
             }
             const existingItem = cart.find(item => item.id === currentProduct.id && item.size === selectedSize);
@@ -2020,7 +2124,7 @@
         async function processOrder() {
             validateAndCleanCart();
             if (cart.length === 0) {
-                if (tg && tg.showAlert) tg.showAlert("Ваша корзина пуста или товары были обновлены.");
+                showCustomAlert("Ваша корзина пуста или товары были обновлены.");
                 navigate('catalog');
                 return;
             }
@@ -2040,14 +2144,10 @@
 
             const delivery = deliveryRadio ? (deliveryRadio.value === 'cdek' ? 'СДЭК' : 'Почта России') : 'Не выбран';
             const isQR = paymentRadio && paymentRadio.value === 'qr';
-            const payment = isQR ? 'QR-код (Ожидает оплаты)' : 'Через менеджера';
+            const payment = isQR ? 'QR-код' : 'Через менеджера';
 
             if (!name || !surname || !patronymic || !telegram || (phone.length != 15) || !address) {
-                if (tg && tg.showAlert) {
-                    tg.showAlert("Пожалуйста, заполните все обязательные поля!");
-                } else {
-                    alert("Пожалуйста, заполните все обязательные поля!");
-                }
+                showCustomAlert("Пожалуйста, заполните все обязательные поля!");
                 return;
             }
 
@@ -2124,31 +2224,27 @@
                         const totalSum = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                         document.getElementById('qr-total-amount').innerText = `${totalSum.toLocaleString()} руб`;
                         navigate('qr');
+                        
                     } else {
-                        if (tg && tg.showAlert) {
-                            tg.showAlert("Менеджер свяжется с вами!", () => {
-                                localStorage.removeItem('tg_shop_cart');
-                                cart = [];
-                                updateCartBadge();
-                                tg.close();
+                        
+                        showCustomAlert("Менеджер свяжется с вами!") ;
+                        localStorage.removeItem('tg_shop_cart');
+                        localStorage.removeItem('tg_shop_checkout');
+                        cart = [];
+                        updateCartBadge();
+
+                        document.querySelectorAll('#checkout-screen input, #checkout-screen textarea').forEach(el => {
+                                el.value = '';
                             });
-                        } else {
-                            alert("Менеджер свяжется с вами!");
-                            localStorage.removeItem('tg_shop_cart');
-                            cart = [];
-                            updateCartBadge();
-                            historyStack = ['catalog'];
-                            renderScreenInternal('catalog');
-                        }
+                        historyStack = ['catalog'];
+                        renderScreenInternal('catalog');
+                        
+                        
                     }
-                    localStorage.removeItem('tg_shop_checkout');
+                    
                 }
             } catch (error) {
-                if (tg && tg.showAlert) {
-                    tg.showAlert(`Ошибка при отправке заказа: ${error.message}`);
-                } else {
-                    alert(`Ошибка API: ${error.message}`);
-                }
+                showCustomAlert(`Ошибка при отправке заказа: ${error.message}`);
             } finally {
                 if (tg && tg.MainButton) {
                     tg.MainButton.hideProgress();
@@ -2160,21 +2256,16 @@
                 tg.HapticFeedback.notificationOccurred('success');
             }
 
-            if (tg && tg.showAlert) {
-                tg.showAlert("Спасибо за покупку!", () => {
-                    localStorage.removeItem('tg_shop_cart');
-                    cart = [];
-                    updateCartBadge();
-                    tg.close();
-                });
-            } else {
-                alert("Спасибо за покупку!");
-                localStorage.removeItem('tg_shop_cart');
-                cart = [];
-                updateCartBadge();
-                historyStack = ['catalog'];
-                renderScreenInternal('catalog');
-            }
+            showCustomAlert("Спасибо за покупку!");
+            localStorage.removeItem('tg_shop_cart');
+            localStorage.removeItem('tg_shop_checkout');
+            cart = [];
+            updateCartBadge();
+            document.querySelectorAll('#checkout-screen input, #checkout-screen textarea').forEach(el => {
+                                el.value = '';
+                            });
+            historyStack = ['catalog'];
+            renderScreenInternal('catalog');
         }
 
         document.addEventListener("DOMContentLoaded", () => {
