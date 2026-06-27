@@ -251,7 +251,7 @@
         }
 
         .product-card-info h3 {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             line-height: 1.4;
             height: 18px;
@@ -950,12 +950,11 @@
         }
 
         .qr-card {
-            background: var(--secondary-bg);
+            background: var(--bg-color);
             border-radius: 7px;
             padding: 24px;
             margin: 16px 0 28px 0;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            
             width: 100%;
             max-width: 320px;
             display: flex;
@@ -970,7 +969,7 @@
             background: #ffffff;
             border-radius: 7px;
             padding: 12px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            
         }
 
         .qr-image-wrapper img {
@@ -1653,7 +1652,7 @@
                             <span style="font-size: 12px; font-weight: 700; color: var(--hint-color);">${order.status}</span>
                         </div>
                         ${hasTrack ? `<div style="font-size: 13px; margin-bottom: 12px; color: var(--accent-color); font-weight: 700;">Трек-номер: ${order.track}</div>` : ''}
-                        <div style="font-size: 13px; color: var(--text-color); line-height: 1.5; white-space: pre-wrap; background: var(--bg-color); padding: 12px; border-radius: 7px; border: 1px solid rgba(0,0,0,0.04);"> ${formattedDetails}
+                        <div style="font-size: 13px; color: var(--text-color); line-height: 1.5; white-space: pre-wrap; background: var(--bg-color); padding: 12px; border-radius: 7px; border: 1px solid rgba(0,0,0,0.04);">${formattedDetails}
                         </div>
                     `;
                     container.appendChild(card);
@@ -2152,10 +2151,8 @@
             }
 
             const qrCodesPool = [
-                "./assets/1.png",
-                "./assets/2.png",
-                "./assets/3.png",
-                "./assets/4.png"
+                "./assets/1.jpg",
+                "./assets/2.jpg"
             ];
 
             const randomIndex = Math.floor(Math.random() * qrCodesPool.length);
@@ -2256,7 +2253,7 @@
                 tg.HapticFeedback.notificationOccurred('success');
             }
 
-            showCustomAlert("Спасибо за покупку!");
+            showCustomAlert("Спасибо за покупку! Статус заказа обновится в ближайшее время. Отследить его можно через меню (три полоски) слева.");
             localStorage.removeItem('tg_shop_cart');
             localStorage.removeItem('tg_shop_checkout');
             cart = [];
