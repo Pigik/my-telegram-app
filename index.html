@@ -2145,10 +2145,16 @@
             const isQR = paymentRadio && paymentRadio.value === 'qr';
             const payment = isQR ? 'QR-код' : 'Через менеджера';
 
-            if (!name || !surname || !patronymic || !telegram || (phone.length != 15) || !address) {
+            if (!name || !surname || !patronymic || !telegram || (phone.length != 15) || !address || !email) {
                 showCustomAlert("Пожалуйста, заполните все обязательные поля!");
                 return;
             }
+            
+            if (name.length >=30 || surname.length >=40 || patronymic.length >=30 || telegram.length >=34 || address.length >=150 || email.length >=100 || comment.length >=505 ) {
+                showCustomAlert("Пожалуйста, не привышайте лимит символов полей для ввода!");
+                return;
+            }
+
 
             const qrCodesPool = [
                 "./assets/1.jpg",
@@ -2157,11 +2163,10 @@
 
             const randomIndex = Math.floor(Math.random() * qrCodesPool.length);
 
-            // Извлекаем сырую строку инициализации для безопасной передачи на бэкенд
+            // инициализация для безопасной передачи на бэкенд
             const initDataRaw = window.Telegram.WebApp.initData || "";
 
-            // Формируем полезную нагрузку. Поля userId и userName удалены,
-            // так как бэкенд возьмет их из проверенной строки initData.
+            
             const orderPayload = {
                 surname: surname,
                 name: name,
