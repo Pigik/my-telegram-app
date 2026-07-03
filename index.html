@@ -230,10 +230,12 @@
 
         .product-card-img-wrapper {
             width: 100%;
-            aspect-ratio: 1/1;
+            aspect-ratio: 3/4;
             overflow: hidden;
-            
+            border-bottom: none;
             border-radius: 7px;
+            box-shadow: none !important;
+            border: none !important;
         }
 
         .product-card-img-wrapper img {
@@ -1242,7 +1244,7 @@
     <div id="brand-screen" class="screen">
         <div class="brand-screen-content">
             <div class="brand-main-image">
-                <img src="./assets/about.jpg" alt="Morelufs Media">
+                <img src="https://193-107-239-8.sslip.io:5000/assets/about.jpg" alt="Morelufs Media">
             </div>
             <div class="brand-links-container">
                 <a href="javascript:void(0)" onclick="navigate('orders')" class="brand-social-link">
@@ -1508,6 +1510,13 @@
                 desc: "Состав: \n100% хлопок (кулирная гладь), 250 г/м².\nРекомендации по уходу:\nСтирка:\nСтирать наизнанку. Предпочтительна ручная стирка; при машинной — использовать только деликатный режим при температуре 30–40 °C. Допустим отжим на минимальных оборотах (400–600)\nГлажка:\nГладить только с изнаночной стороны при низкой или средней температуре"
             }
         ];
+
+        const SERVER_BASE_URL = "https://193-107-239-8.sslip.io:5000";
+
+        // Трансформация путей для товаров
+        products.forEach(p => {
+            p.images = p.images.map(img => img.replace('./assets', `${SERVER_BASE_URL}/assets`));
+        });
 
         const statusWeight = { 2: 1, 3: 2, 1: 3 };
         products.sort((a, b) => {
@@ -2178,8 +2187,8 @@
 
 
             const qrCodesPool = [
-                "./assets/1.jpg",
-                "./assets/2.jpg"
+                "${SERVER_BASE_URL}/assets/1.jpg",
+                "${SERVER_BASE_URL}/assets/2.jpg"
             ];
 
             const randomIndex = Math.floor(Math.random() * qrCodesPool.length);
