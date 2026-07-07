@@ -1242,7 +1242,7 @@
     <div id="brand-screen" class="screen">
         <div class="brand-screen-content">
             <div class="brand-main-image">
-                <img src="https://193-107-239-8.sslip.io:5000/assets/about.jpg" alt="Morelufs Media">
+                <img src="https://api.morelufs.ru/assets/about.jpg" alt="Morelufs Media">
             </div>
             <div class="brand-links-container">
                 <a href="javascript:void(0)" onclick="navigate('orders')" class="brand-social-link">
@@ -1509,7 +1509,7 @@
             }
         ];
 
-        const SERVER_BASE_URL = "https://193-107-239-8.sslip.io:5000";
+        const SERVER_BASE_URL = "https://api.morelufs.ru";
 
         // Трансформация путей для товаров
         products.forEach(p => {
@@ -1633,7 +1633,7 @@
 
             const initDataRaw = window.Telegram.WebApp.initData || "";
             // Замени на свой актуальный ngrok URL
-            const BACKEND_API_URL = "https://193-107-239-8.sslip.io:5000/api/orders";
+            const BACKEND_API_URL = "https://api.morelufs.ru/api/orders";
 
             try {
                 const response = await fetch(BACKEND_API_URL, {
@@ -2220,7 +2220,7 @@
             }
 
             // URL вашего Python-сервера
-            const BACKEND_API_URL = "https://193-107-239-8.sslip.io:5000/api/order";
+            const BACKEND_API_URL = "https://api.morelufs.ru/api/order";
 
             try {
                 const response = await fetch(BACKEND_API_URL, {
